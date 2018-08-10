@@ -1,0 +1,107 @@
+@import '../../scss/variables/main.scss';
+@import '../../scss/mixins.scss';
+.theme-selector-component {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .panel-heading {
+    label {
+      margin-bottom: 0;
+    }
+  }
+  /* Poster Themes */
+  ul.themes {
+    li {
+      position: relative;
+      &.theme {
+        width: 25%;
+        margin-right: 11px;
+        height: 100px;
+        border-radius: 8px;
+        border: 3px solid rgba(white, 0.9);
+        box-shadow: 0 0 30px rgba(17, 17, 17, 0.2);
+        transition: all 300ms ease;
+        img {
+          opacity: 1;
+        }
+        p {
+          color: transparent;
+        }
+      }
+      &:last-child {
+        margin-right: 0;
+      }
+      /* Selected Theme */
+      &.selected {
+        border: 2px solid rgba(white, 1);
+
+        img {
+          opacity: 0;
+        }
+        p {
+          color: rgba(white, 0.9);
+        }
+      } // Black
+      &.black {
+        background: $black;
+      } // Midnight Blue
+      &.midnightblue {
+        background: $midnight-blue;
+      } // Grey Blue
+      &.greyblue {
+        background: $grey-blue;
+      } // Aquamarine
+      &.aquamarine {
+        background: $aquamarine;
+      }
+      img {
+        @include centerer(absolute);
+        width: 80%;
+        max-width: 80px;
+        max-height: 90px;
+        height: auto;
+        border: 1px solid white;
+        border-radius: 50%;
+        background-color: white;
+      }
+      p {
+        @include v-center;
+        text-align: center;
+        padding: 0 4px;
+        font-weight: 400;
+      }
+    }
+  }
+  /* Poster Toggles */
+  ul.toggles {
+    li {
+      border-bottom: 1px solid $tns-panel-label-toggle-border;
+      &:last-child {
+        border-bottom: none;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+        .label-toggle {
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
+        }
+      }
+    }
+    .label-toggle {
+      background: #fff;
+      align-items: center;
+      .toggle-label {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        font-weight: 500;
+        span {
+          font-size: 12px;
+          margin-left: 15px;
+          color: $tns-panel-muted-text;
+        }
+      }
+    }
+  }
+}

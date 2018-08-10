@@ -1,0 +1,62 @@
+@import '../../scss/base';
+.GeoLocator {
+  position: relative;
+  height: 55px;
+  z-index: 999;
+  border-radius: $tns-panel-input-border-radius;
+  border: $tns-panel-input-border;
+  font-size: $tns-panel-input-font-size;
+  // box-shadow: $tns-panel-input-box-shadow;
+  i {
+    @include v-center(absolute);
+    left: 15px;
+  }
+  input {
+    display: inline-block !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    padding-right: 15px;
+    text-indent: 20px !important;
+    outline: none;
+    margin: 0;
+    height: $tns-panel-input-height;
+    border-radius: $tns-panel-input-border-radius;
+    border: $tns-panel-input-border;
+    font-size: $tns-panel-input-font-size;
+    // box-shadow: $tns-panel-input-box-shadow;
+    min-width: 1px;
+    color: $tns-text-fade;
+    &:focus {
+      transition: all 1s linear;
+      border-color: black;
+    }
+  }
+  > div {
+    width: 100%;
+    background: transparent;
+    > div {
+      position: absolute;
+      transform: translateY(-2px);
+      background: white !important;
+      display: block;
+      position: inherit !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      max-height: unset !important;
+      overflow: scroll !important;
+      border-radius: 0 !important;
+      border-bottom-left-radius: 5px !important;
+      border-bottom-right-radius: 5px !important;
+      > div {
+        padding: 1.5em 1.5em 1.5em 3em;
+        background: white;
+      }
+      > div:hover {
+        background: rgb(239, 245, 254) !important;
+        color: black !important;
+      }
+    }
+  }
+}

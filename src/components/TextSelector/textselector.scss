@@ -1,0 +1,67 @@
+@import '../../scss/base.scss';
+.text-selector-component {
+  .more {
+    cursor: pointer;
+    height: auto;
+    margin-top: -2px;
+    padding-bottom: 13px;
+    color: darken($tns-text-muted, 25%);
+    font-size: 15px;
+    i {
+      color: $tns-text-muted;
+      margin-left: 5px;
+    }
+  }
+  .more-container {
+    margin: 0 -15px 15px -15px;
+    padding: 15px;
+    background-color: rgba($tns-primary, 0.06);
+  }
+  .tns-textarea {
+    margin-bottom: 15px;
+    position: relative;
+
+    textarea {
+      width: $tns-panel-textarea-width;
+      height: $tns-panel-textarea-height;
+      border-radius: $tns-panel-input-border-radius;
+      border: $tns-panel-input-border;
+      font-size: $tns-panel-input-font-size;
+      box-shadow: $tns-panel-input-box-shadow;
+      padding: $tns-panel-textarea-padding-top;
+      resize: none;
+      outline: none;
+      text-transform: uppercase;
+    }
+    textarea::-webkit-input-placeholder {
+      /* Chrome/Opera/Safari */
+      color: $tns-text-muted;
+    }
+    textarea::-moz-placeholder {
+      /* Firefox 19+ */
+      color: $tns-text-muted;
+    }
+    textarea:-ms-input-placeholder {
+      /* IE 10+ */
+      color: $tns-text-muted;
+    }
+    textarea:-moz-placeholder {
+      /* Firefox 18- */
+      color: $tns-text-muted;
+    }
+    .char-count {
+      text-align: right;
+    }
+    .char-count.excess {
+      color: red;
+    }
+  }
+  .help-btn {
+    font-size: 17px;
+    height: 17px;
+    position: absolute;
+    bottom: 19px;
+    left: 17px;
+  }
+  // Popover Styles In App.scss
+}

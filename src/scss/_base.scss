@@ -1,0 +1,45 @@
+@import 'mixins';
+@import 'variables/main';
+@import 'bootstrap/stylesheets/bootstrap';
+
+.flex {
+  display: flex;
+}
+
+.btn,
+.sweet-alert {
+  outline: none !important;
+}
+
+.sweet-alert {
+  background: $tns-panel-background;
+  border: 1px solid transparent;
+  border-radius: $press-border-radius;
+  box-shadow: $press-box-shadow;
+  font-family: 'Avenir', 'HelveticaNeue', 'Helvetica Neue', sans-serif;
+  div {
+    background: transparent !important;
+  }
+  input {
+    width: $tns-panel-input-width !important;
+    outline: none !important;
+    height: $tns-panel-input-height !important;
+    border-radius: $tns-panel-input-border-radius !important;
+    border: $tns-panel-input-border !important;
+    padding-left: $tns-panel-input-text-indent !important;
+    font-size: $tns-panel-input-font-size !important;
+    box-shadow: $tns-panel-input-box-shadow !important;
+    min-width: 1px !important;
+    color: $tns-text-fade !important;
+  }
+}
+
+.Select,
+select,
+.day-input,
+.theme,
+.slider,
+.btn,
+.pointer {
+  cursor: pointer;
+}

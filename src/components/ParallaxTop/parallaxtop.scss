@@ -1,0 +1,105 @@
+@import '../../scss/base.scss';
+.parallaxtop-component {
+  display: flex;
+  padding: 20px 0 20px 10px;
+  @media screen and (max-width: 320px) {
+    padding: 10px;
+  }
+  img {
+    width: 100px;
+    height: auto;
+    max-height: 100px;
+    align-self: center;
+    top: 0;
+  }
+  .text {
+    display: flex;
+    width: calc(100% - 100px);
+    padding-left: 20px;
+    color: white;
+    position: relative;
+    div {
+      margin: auto 0;
+      h1 {
+        font-size: 23px;
+        margin: 0;
+        margin-bottom: 5px;
+      }
+      p {
+        margin: 0;
+        font-size: 12px;
+        padding-right: 15px;
+        color: $tns-text-muted;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1023px) {
+    img {
+      width: 80px;
+      max-height: 80px;
+    }
+    .text {
+      padding-right: 0;
+      width: auto;
+      div {
+        h1 {
+          font-size: 20px; // margin-top: 10px;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .text {
+      div {
+        h1 {
+          font-size: 25px;
+        }
+        p {
+          font-size: 16px;
+          padding-right: 0;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 520px) {
+    .text {
+      div {
+        h1 {
+          font-size: 22px;
+        }
+        p {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 330px) {
+    .text {
+      padding-left: 10px;
+      div {
+        p {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 320px) {
+    img {
+      width: 75px;
+      max-width: 75px;
+    }
+    .text {
+      div {
+        h1 {
+          // margin: 0;
+          font-size: 17px;
+        }
+        p {
+          font-size: 11.75px;
+          // margin-bottom: 5px;
+        }
+      }
+    }
+  }
+}

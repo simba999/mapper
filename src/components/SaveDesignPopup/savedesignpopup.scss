@@ -1,0 +1,62 @@
+@import '../../scss/base.scss';
+.savedesignpopup-component {
+  .sweet-alert {
+    z-index: 5001 !important;
+    outline: none;
+    i {
+      position: absolute;
+      cursor: pointer;
+      top: 9px;
+      left: 16px;
+    }
+    h2 {
+      font-size: 40px;
+      margin-top: 25px;
+    }
+    .lead {
+      margin-bottom: 0;
+      p {
+        font-size: 15px;
+        width: 92%;
+        @include h-center;
+        margin-bottom: 20px;
+      }
+      .input-wrap {
+        position: relative;
+        i {
+          position: absolute;
+          top: 14.5px;
+          font-size: 25px;
+          right: calc(15% + 15px);
+          left: unset;
+        }
+      }
+      input {
+        outline: none;
+        width: 70% !important;
+        margin-bottom: 20px;
+        @media screen and (max-width: 450px) {
+          width: 90% !important;
+        }
+      }
+    }
+    p {
+      margin-top: 0 !important;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: $tns-primary;
+      margin-bottom: 25px;
+      font-size: 14px;
+      margin-right: 0 !important;
+      border-radius: 4px;
+      text-transform: uppercase;
+      height: 40px;
+      width: 70%;
+      border-width: 2px;
+      @media screen and (max-width: 450px) {
+        width: 90% !important;
+      }
+    }
+  }
+}

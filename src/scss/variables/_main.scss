@@ -1,0 +1,40 @@
+// Base
+$press-primary: #222d3f;
+$background: #f2f3f6;
+$press-success: #108ab5;
+$press-white: white;
+
+// Navbar
+$press-navbar-text: #abacac;
+
+// Navs
+$press-nav-pill-color: #abacac;
+
+// Inactive
+$press-inactive-background: #f4f5f9;
+$inactive-text: #88898b;
+
+// Text
+$press-text-muted: #999a9a;
+$press-text-success: #53b826;
+
+/* ----------------------------------- New ----------------------------------- */
+
+$tns-primary: #336e7b;
+$tns-secondary: #0f4351;
+$background: #f0f0f0;
+$tns-text: #444444;
+$tns-text-fade: lighten(#384656, 15%);
+$tns-text-muted: lighten(#999a9a, 12%);
+$tns-input-text: #384656;
+
+// Poster Colors
+$aquamarine: #164b58;
+$black: #111111;
+$grey-blue: #384656;
+$midnight-blue: #191d29;
+
+// Imports
+@import 'panels';
+@import 'buttons';
+@import 'inputs';
