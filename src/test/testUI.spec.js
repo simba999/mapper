@@ -62,7 +62,7 @@ describe("Home Page", () => {
 					console.log(title)
 					assert.strictEqual(title, appTitle, "App is successfully loaded!!!");
 
-					await browser.wait(until.titleIs(appTitle), 10000);
+					// await browser.wait(until.titleIs(appTitle), 10000);
 
 					// const canvas = browser.findElement(By.xpath("//canvas[@id='canvas']"))
 					// 	.then((obj) => {
@@ -70,16 +70,16 @@ describe("Home Page", () => {
 					// 	});
 
 
-					await browser.findElement(By.xpath("//li[contains(@class, 'theme')]"))
-						.then(async (obj) => {
-							const themeColor = await obj.getText().then((text) => { 
-								return text 
-							});
-							console.log('color: ', themeColor);
+					// await browser.findElement(By.xpath("//li[contains(@class, 'theme')]"))
+					// 	.then(async (obj) => {
+					// 		const themeColor = await obj.getText().then((text) => { 
+					// 			return text 
+					// 		});
+					// 		console.log('color: ', themeColor);
 
-							// await obj.click()
-							// await setTimeout(()=> {}, 3000);
-						})
+					// 		// await obj.click()
+					// 		// await setTimeout(()=> {}, 3000);
+					// 	})
 
 					// browser.quit();
 					resolve();
