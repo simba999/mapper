@@ -1,12 +1,12 @@
+/* global describe, beforeEach, it, window */
 /**
  * Dependency Modules
  */
-const assert = require("assert");
-const webdriver = require("selenium-webdriver");
-const By = webdriver.By;
-const until = webdriver.until;
-const Key = webdriver.Key;
-require("geckodriver");
+const assert = require('assert');
+const webdriver = require('selenium-webdriver');
+
+const { By, until, Key } = webdriver;
+require('geckodriver');
 
 // Application Server
 const serverUri = 'http://localhost:3000/';
@@ -22,7 +22,6 @@ const browser = new webdriver.Builder()
   .withCapabilities({ browserName: 'chrome' })
   .build();
 
-
 // /**
 //  * Config for Firefox browser (Comment Chrome config when you intent to test in Firefox)
 //  * @type {webdriver}
@@ -32,12 +31,11 @@ const browser = new webdriver.Builder()
 //  .usingServer()
 //  .withCapabilities({ browserName: "firefox" })
 //  .build();
-  
 
 /**
-* Function to get the title and resolve it it promise.
-* @return {[type]} [description]
-*/
+ * Function to get the title and resolve it it promise.
+ * @return {[type]} [description]
+ */
 function logTitle() {
   return new Promise((resolve) => {
     browser.getTitle().then((title) => {
@@ -47,27 +45,19 @@ function logTitle() {
 }
 
 /**
-* Fucntion to check changes of canvas updates
-*
-*
-*/
+ * Fucntion to check changes of canvas updates
+ *
+ *
+ */
 
 const checkCanvasUpdate = async (browser, originCanvasImage, message) => {
-  await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-    .then((canvasObject) => {
-      const base = browser.executeScript(
-        'return arguments[0].toDataURL();',
-        canvasObject,
-      );
+  await browser.findElement(By.xpath("//canvas[@id='canvas']")).then((canvasObject) => {
+    const base = browser.executeScript('return arguments[0].toDataURL();', canvasObject);
 
-      base.then((result) => {
-        assert.notStrictEqual(
-          result,
-          originCanvasImage,
-          message,
-        );
-      });
+    base.then((result) => {
+      assert.notStrictEqual(result, originCanvasImage, message);
     });
+  });
 };
 
 describe('Home Page', () => {
@@ -77,8 +67,8 @@ describe('Home Page', () => {
   });
 
   /**
-  * Test case to load our application and check the title.
-  */
+   * Test case to load our application and check the title.
+   */
   it('Should load the home page', async () => {
     // return new Promise((resolve, reject) => {
     await browser
@@ -93,37 +83,31 @@ describe('Home Page', () => {
         // get theme image buttons
         const themeBtns = await browser.findElements(By.xpath("//li[contains(@class, 'theme')]"));
 
-        assert.strictEqual(
-          themeBtns.length,
-          4,
-          'There should be 4 theme buttons on page',
-        );
+        assert.strictEqual(themeBtns.length, 4, 'There should be 4 theme buttons on page');
 
-        await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-          .then((canvasObject) => {
-            const base = browser.executeScript('return arguments[0].toDataURL();', canvasObject);
-            base.then((result) => {
-              originCanvasImage = result;
-            });
+        await browser.findElement(By.xpath("//canvas[@id='canvas']")).then((canvasObject) => {
+          const base = browser.executeScript('return arguments[0].toDataURL();', canvasObject);
+          base.then((result) => {
+            originCanvasImage = result;
           });
+        });
 
         /* iteratate and click theme image buttons and check canvas change */
-        await browser.findElements(By.xpath("//li[contains(@class, 'theme')]"))
-          .then(async (objs) => {
-            await objs.forEach(async (element) => {
-              const color = await element.findElement(By.xpath('.//p'))
-                .then(pTag => pTag.getText().then(text => text));
+        await browser.findElements(By.xpath("//li[contains(@class, 'theme')]")).then(async (objs) => {
+          await objs.forEach(async (element) => {
+            const color = await element
+              .findElement(By.xpath('.//p'))
+              .then(pTag => pTag.getText().then(text => text));
 
-              console.log('color:', color);
+            console.log('color:', color);
 
-              await element.click();
-              await setTimeout(() => {}, 1000);
+            await element.click();
+            await setTimeout(() => {}, 1000);
 
-              const message = `Canvas not updated when click ${color} theme image`;
-              await checkCanvasUpdate(browser, originCanvasImage, message);
-            });
+            const message = `Canvas not updated when click ${color} theme image`;
+            await checkCanvasUpdate(browser, originCanvasImage, message);
           });
-
+        });
 
         /* enter location and check canvas change */
         await browser
@@ -136,7 +120,8 @@ describe('Home Page', () => {
 
         /* change date */
         // check year
-        await browser.findElement(By.xpath("//select[@class='sc-kGXeez iePPvq'][1]//option[1]"))
+        await browser
+          .findElement(By.xpath("//select[@class='sc-kGXeez iePPvq'][1]//option[1]"))
           .then(async (element) => {
             await element.click();
 
@@ -146,7 +131,8 @@ describe('Home Page', () => {
           });
 
         // check month
-        await browser.findElement(By.xpath("//select[@class='sc-kGXeez iePPvq'][2]//option[1]"))
+        await browser
+          .findElement(By.xpath("//select[@class='sc-kGXeez iePPvq'][2]//option[1]"))
           .then(async (element) => {
             await element.click();
 
@@ -156,7 +142,8 @@ describe('Home Page', () => {
           });
 
         // check day
-        await browser.findElement(By.xpath("//div[@class='sc-kpOJdX UIIWh']"))
+        await browser
+          .findElement(By.xpath("//div[@class='sc-kpOJdX UIIWh']"))
           .then(async (element) => {
             await element.click();
             await setTimeout(() => {}, 1000);
