@@ -121,22 +121,6 @@ describe('Home Page', () => {
 
               const message = `Canvas not updated when click ${color} theme image`;
               await checkCanvasUpdate(browser, originCanvasImage, message);
-
-              // await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-              //   .then((canvasObject) => {
-              //     const base = browser.executeScript(
-              //       'return arguments[0].toDataURL();',
-              //       canvasObject,
-              //     );
-
-              //     base.then((result) => {
-              //       assert.notStrictEqual(
-              //         result,
-              //         originCanvasImage,
-              //         message,
-              //       );
-              //     });
-              //   });
             });
           });
 
@@ -147,21 +131,8 @@ describe('Home Page', () => {
           .sendKeys('TORONTO, ON, CANADA', Key.RETURN);
 
         await setTimeout(() => {}, 1000);
-        await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-          .then((canvasObject) => {
-            const base = browser.executeScript(
-              'return arguments[0].toDataURL();',
-              canvasObject,
-            );
-
-            base.then((result) => {
-              assert.notStrictEqual(
-                result,
-                originCanvasImage,
-                'Canvas not updated when change location',
-              );
-            });
-          });
+        const message = 'Canvas not updated when change location';
+        await checkCanvasUpdate(browser, originCanvasImage, message);
 
         /* change date */
         // check year
@@ -170,21 +141,8 @@ describe('Home Page', () => {
             await element.click();
 
             await setTimeout(() => {}, 1000);
-            await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-              .then((canvasObject) => {
-                const base = browser.executeScript(
-                  'return arguments[0].toDataURL();',
-                  canvasObject,
-                );
-
-                base.then((result) => {
-                  assert.notStrictEqual(
-                    result,
-                    originCanvasImage,
-                    'Canvas not updated when change year',
-                  );
-                });
-              });
+            const message = 'Canvas not updated when change year';
+            await checkCanvasUpdate(browser, originCanvasImage, message);
           });
 
         // check month
@@ -193,21 +151,8 @@ describe('Home Page', () => {
             await element.click();
 
             await setTimeout(() => {}, 1000);
-            await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-              .then((canvasObject) => {
-                const base = browser.executeScript(
-                  'return arguments[0].toDataURL();',
-                  canvasObject,
-                );
-
-                base.then((result) => {
-                  assert.notStrictEqual(
-                    result,
-                    originCanvasImage,
-                    'Canvas not updated when change month',
-                  );
-                });
-              });
+            const message = 'Canvas not updated when change month';
+            await checkCanvasUpdate(browser, originCanvasImage, message);
           });
 
         // check day
@@ -222,73 +167,60 @@ describe('Home Page', () => {
                 await subElement.click();
 
                 await setTimeout(() => {}, 1000);
-                await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-                  .then((canvasObject) => {
-                    const base = browser.executeScript(
-                      'return arguments[0].toDataURL();',
-                      canvasObject,
-                    );
-
-                    base.then((result) => {
-                      assert.notStrictEqual(
-                        result,
-                        originCanvasImage,
-                        'Canvas not updated when change month',
-                      );
-                    });
-                  });
+                const message = 'Canvas not updated when change day';
+                await checkCanvasUpdate(browser, originCanvasImage, message);
               });
           });
 
-        /* write message */
-        await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][2]")).click();
-        await browser.findElement(By.xpath("//textarea[@class='sc-hMqMXs zscDj']"))
-          .sendKeys('My body', Key.RETURN);
+        // /* write message */
+        // await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][2]")).click();
+        // await browser.findElement(By.xpath("//textarea[@class='sc-hMqMXs zscDj']"))
+        //   .sendKeys('My body', Key.RETURN);
 
-        /* change paper size */
-        await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][3]")).click();
+        // /* change paper size */
+        // await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][3]")).click();
 
-        const cls = "//div[contains(@class, 'dimensions-col')]"
-                  + "//div[contains(@class, 'dimension')]";
+        // const cls = "//div[contains(@class, 'dimensions-col')]"
+        //           + "//div[contains(@class, 'dimension')]";
 
-        await browser.findElements(By.xpath(cls))
-          .then(async (elements) => {
-            await elements.forEach(async (element, idx) => {
-              await element.click();
-              await setTimeout(() => {}, 1000);
+        // await browser.findElements(By.xpath(cls))
+        //   .then(async (elements) => {
+        //     await elements.forEach(async (element, idx) => {
+        //       await element.click();
+        //       await setTimeout(() => {}, 1000);
 
-              await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-                .then((canvasObject) => {
-                  const base = browser.executeScript(
-                    'return arguments[0].toDataURL();',
-                    canvasObject,
-                  );
+        //       await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+        //         .then((canvasObject) => {
+        //           const base = browser.executeScript(
+        //             'return arguments[0].toDataURL();',
+        //             canvasObject,
+        //           );
 
-                  let paperSize = '50cm X 70cm';
-                  if (idx === 1) {
-                    paperSize = '18" X 24"';
-                  }
+        //           let paperSize = '50cm X 70cm';
+        //           if (idx === 1) {
+        //             paperSize = '18" X 24"';
+        //           }
 
-                  base.then((result) => {
-                    assert.notStrictEqual(
-                      result,
-                      originCanvasImage,
-                      `Canvas not updated when click ${paperSize} theme image`,
-                    );
-                  });
-                });
-            });
-          });
+        //           base.then((result) => {
+        //             assert.notStrictEqual(
+        //               result,
+        //               originCanvasImage,
+        //               `Canvas not updated when click ${paperSize} theme image`,
+        //             );
+        //           });
+        //         });
+        //     });
+        //   });
 
-        /* Check Advanced options */
-        await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][3]")).click();
+        // /* Check Advanced options */
+        // await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][3]")).click();
 
-        // change title
-        await browser.findElement(By.xpath("//input[@class='sc-hSdWYo erHRpd'][1]"))
-          .sendKeys('THE NIGHT SKY', Key.RETURN);
+        // // change title
+        // await browser.findElement(By.xpath("//input[@class='sc-hSdWYo erHRpd'][1]"))
+        //   .sendKeys('THE NIGHT SKY', Key.RETURN);
 
-        await browser.findElement(By.xpath("//input[@class='sc-hSdWYo erHRpd'][2]"))
-          .sendKeys('Welcome starmapper', Key.RETURN);
+        // await browser.findElement(By.xpath("//input[@class='sc-hSdWYo erHRpd'][2]"))
+        //   .sendKeys('Welcome starmapper', Key.RETURN);
       })
       .catch(err => console.log(err));
   });
