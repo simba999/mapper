@@ -5,6 +5,7 @@ const assert = require("assert");
 const webdriver = require("selenium-webdriver");
 const By = webdriver.By;
 const until = webdriver.until;
+const Key = webdriver.Key;
 require("geckodriver");
 
 // Application Server
@@ -45,10 +46,16 @@ function logTitle() {
   });
 }
 
+/**
+* Fucntion to check changes of canvas updates
+*
+*
+*/
+
 describe('Home Page', () => {
   /* Configuration before launching a case */
   beforeEach(() => {
-    window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+    window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 90000;
   });
 
   /**
@@ -82,7 +89,7 @@ describe('Home Page', () => {
             });
           });
 
-        // iteratate and click theme image buttons and check canvas change
+        /* iteratate and click theme image buttons and check canvas change */
         await browser.findElements(By.xpath("//li[contains(@class, 'theme')]"))
           .then(async (objs) => {
             await objs.forEach(async (element) => {
@@ -92,7 +99,7 @@ describe('Home Page', () => {
               console.log('color:', color);
 
               await element.click();
-              await setTimeout(() => {}, 3000);
+              await setTimeout(() => {}, 1000);
 
               await browser.findElement(By.xpath("//canvas[@id='canvas']"))
                 .then((canvasObject) => {
@@ -110,6 +117,105 @@ describe('Home Page', () => {
                   });
                 });
             });
+          });
+
+
+        /* enter location and check canvas change */
+        await browser
+          .findElement(By.id('geo-location-suggestions'))
+          .sendKeys('TORONTO, ON, CANADA', Key.RETURN);
+
+        await setTimeout(() => {}, 1000);
+        await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+          .then((canvasObject) => {
+            const base = browser.executeScript(
+              'return arguments[0].toDataURL();',
+              canvasObject,
+            );
+
+            base.then((result) => {
+              assert.notStrictEqual(
+                result,
+                originCanvasImage,
+                'Canvas not updated when change location',
+              );
+            });
+          });
+
+        /* change date */
+        // check year
+        await browser.findElement(By.xpath("//select[@class='sc-kGXeez iePPvq'][1]//option[1]"))
+          .then(async (element) => {
+            await element.click();
+
+            await setTimeout(() => {}, 1000);
+            await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+              .then((canvasObject) => {
+                const base = browser.executeScript(
+                  'return arguments[0].toDataURL();',
+                  canvasObject,
+                );
+
+                base.then((result) => {
+                  assert.notStrictEqual(
+                    result,
+                    originCanvasImage,
+                    'Canvas not updated when change year',
+                  );
+                });
+              });
+          });
+
+        // check month
+        await browser.findElement(By.xpath("//select[@class='sc-kGXeez iePPvq'][2]//option[1]"))
+          .then(async (element) => {
+            await element.click();
+
+            await setTimeout(() => {}, 1000);
+            await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+              .then((canvasObject) => {
+                const base = browser.executeScript(
+                  'return arguments[0].toDataURL();',
+                  canvasObject,
+                );
+
+                base.then((result) => {
+                  assert.notStrictEqual(
+                    result,
+                    originCanvasImage,
+                    'Canvas not updated when change month',
+                  );
+                });
+              });
+          });
+
+        // check day
+        await browser.findElement(By.xpath("//div[@class='sc-kpOJdX UIIWh']"))
+          .then(async (element) => {
+            await element.click();
+            await setTimeout(() => {}, 1000);
+
+            await browser.findElement(By.xpath("//div[@class='react-datepicker__week'][1]//div[1]"))
+              .then(async (subElement) => {
+                await subElement.click();
+
+                await setTimeout(() => {}, 1000);
+                await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+                  .then((canvasObject) => {
+                    const base = browser.executeScript(
+                      'return arguments[0].toDataURL();',
+                      canvasObject,
+                    );
+
+                    base.then((result) => {
+                      assert.strictEqual(
+                        result,
+                        originCanvasImage,
+                        'Canvas not updated when change month',
+                      );
+                    });
+                  });
+              });
           });
       })
       .catch(err => console.log(err));
