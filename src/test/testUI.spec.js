@@ -10,6 +10,7 @@ require("geckodriver");
 // Application Server
 const serverUri = 'http://localhost:3000/';
 const appTitle = 'Custom Star Map Editor';
+let originCanvasImage;
 
 /**
  * Config for Chrome browser
@@ -73,19 +74,40 @@ describe('Home Page', () => {
           'There should be 4 theme buttons on page',
         );
 
+        await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+          .then((canvasObject) => {
+            const base = browser.executeScript('return arguments[0].toDataURL();', canvasObject);
+            base.then((result) => {
+              originCanvasImage = result;
+            });
+          });
+
         // iteratate and click theme image buttons and check canvas change
         await browser.findElements(By.xpath("//li[contains(@class, 'theme')]"))
           .then(async (objs) => {
             await objs.forEach(async (element) => {
+              const color = await element.findElement(By.xpath('.//p'))
+                .then(pTag => pTag.getText().then(text => text));
+
+              console.log('color:', color);
+
               await element.click();
               await setTimeout(() => {}, 3000);
 
               await browser.findElement(By.xpath("//canvas[@id='canvas']"))
                 .then((canvasObject) => {
-                  const base = browser.executeScript('return arguments[0].toDataURL();', canvasObject);
+                  const base = browser.executeScript(
+                    'return arguments[0].toDataURL();',
+                    canvasObject,
+                  );
+
                   base.then((result) => {
-                    console.log(result);
-                  })
+                    assert.notStrictEqual(
+                      result,
+                      originCanvasImage,
+                      `Canvas not updated when click ${color} theme image`,
+                    );
+                  });
                 });
             });
           });
