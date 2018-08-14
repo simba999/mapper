@@ -52,6 +52,24 @@ function logTitle() {
 *
 */
 
+const checkCanvasUpdate = async (browser, originCanvasImage, message) => {
+  await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+    .then((canvasObject) => {
+      const base = browser.executeScript(
+        'return arguments[0].toDataURL();',
+        canvasObject,
+      );
+
+      base.then((result) => {
+        assert.notStrictEqual(
+          result,
+          originCanvasImage,
+          message,
+        );
+      });
+    });
+};
+
 describe('Home Page', () => {
   /* Configuration before launching a case */
   beforeEach(() => {
@@ -101,21 +119,24 @@ describe('Home Page', () => {
               await element.click();
               await setTimeout(() => {}, 1000);
 
-              await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-                .then((canvasObject) => {
-                  const base = browser.executeScript(
-                    'return arguments[0].toDataURL();',
-                    canvasObject,
-                  );
+              const message = `Canvas not updated when click ${color} theme image`;
+              await checkCanvasUpdate(browser, originCanvasImage, message);
 
-                  base.then((result) => {
-                    assert.notStrictEqual(
-                      result,
-                      originCanvasImage,
-                      `Canvas not updated when click ${color} theme image`,
-                    );
-                  });
-                });
+              // await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+              //   .then((canvasObject) => {
+              //     const base = browser.executeScript(
+              //       'return arguments[0].toDataURL();',
+              //       canvasObject,
+              //     );
+
+              //     base.then((result) => {
+              //       assert.notStrictEqual(
+              //         result,
+              //         originCanvasImage,
+              //         message,
+              //       );
+              //     });
+              //   });
             });
           });
 
@@ -195,7 +216,8 @@ describe('Home Page', () => {
             await element.click();
             await setTimeout(() => {}, 1000);
 
-            await browser.findElement(By.xpath("//div[@class='react-datepicker__week'][1]//div[1]"))
+            await browser
+              .findElement(By.xpath("//div[@class='react-datepicker__week'][1]//div[1]"))
               .then(async (subElement) => {
                 await subElement.click();
 
@@ -208,7 +230,7 @@ describe('Home Page', () => {
                     );
 
                     base.then((result) => {
-                      assert.strictEqual(
+                      assert.notStrictEqual(
                         result,
                         originCanvasImage,
                         'Canvas not updated when change month',
@@ -217,6 +239,56 @@ describe('Home Page', () => {
                   });
               });
           });
+
+        /* write message */
+        await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][2]")).click();
+        await browser.findElement(By.xpath("//textarea[@class='sc-hMqMXs zscDj']"))
+          .sendKeys('My body', Key.RETURN);
+
+        /* change paper size */
+        await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][3]")).click();
+
+        const cls = "//div[contains(@class, 'dimensions-col')]"
+                  + "//div[contains(@class, 'dimension')]";
+
+        await browser.findElements(By.xpath(cls))
+          .then(async (elements) => {
+            await elements.forEach(async (element, idx) => {
+              await element.click();
+              await setTimeout(() => {}, 1000);
+
+              await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+                .then((canvasObject) => {
+                  const base = browser.executeScript(
+                    'return arguments[0].toDataURL();',
+                    canvasObject,
+                  );
+
+                  let paperSize = '50cm X 70cm';
+                  if (idx === 1) {
+                    paperSize = '18" X 24"';
+                  }
+
+                  base.then((result) => {
+                    assert.notStrictEqual(
+                      result,
+                      originCanvasImage,
+                      `Canvas not updated when click ${paperSize} theme image`,
+                    );
+                  });
+                });
+            });
+          });
+
+        /* Check Advanced options */
+        await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][3]")).click();
+
+        // change title
+        await browser.findElement(By.xpath("//input[@class='sc-hSdWYo erHRpd'][1]"))
+          .sendKeys('THE NIGHT SKY', Key.RETURN);
+
+        await browser.findElement(By.xpath("//input[@class='sc-hSdWYo erHRpd'][2]"))
+          .sendKeys('Welcome starmapper', Key.RETURN);
       })
       .catch(err => console.log(err));
   });
