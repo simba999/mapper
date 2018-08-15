@@ -80,9 +80,13 @@ describe('Home Page', () => {
         // await browser.wait(until.titleIs(appTitle), 10000);
         await browser.wait(until.elementLocated(By.xpath("//canvas[@id='canvas']")));
 
+        await browser.findElement(By.xpath("//button[@class='sc-bwzfXH khcJWs']")).click();
+
+        // const numberOfMenu = await browser.findElements(By.xpath("//div[@class='sc-jKJlTe dRaXUR']"));
+        // assert.strictEqual(numberOfMenu, 4, 'menu dropdowns don\'t work');
+
         // get theme image buttons
         const themeBtns = await browser.findElements(By.xpath("//li[contains(@class, 'theme')]"));
-
         assert.strictEqual(themeBtns.length, 4, 'There should be 4 theme buttons on page');
 
         await browser.findElement(By.xpath("//canvas[@id='canvas']")).then((canvasObject) => {
@@ -112,7 +116,7 @@ describe('Home Page', () => {
         /* enter location and check canvas change */
         await browser
           .findElement(By.id('geo-location-suggestions'))
-          .sendKeys('TORONTO, ON, CANADA', Key.RETURN);
+          .sendKeys('TORONTO, ON, CANADA', Key.ENTER);
 
         await setTimeout(() => {}, 1000);
         const message = 'Canvas not updated when change location';
@@ -159,55 +163,112 @@ describe('Home Page', () => {
               });
           });
 
+        // click all menu dropdowns
+        await browser.findElements(By.xpath("//div[@class='sc-jKJlTe dRaXUR']//text"))
+          .then((elements) => {
+            elements.forEach((element) => {
+              element.click();
+            });
+          });
+        await setTimeout(() => {}, 1000);
+
         // /* write message */
-        // await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][2]")).click();
-        // await browser.findElement(By.xpath("//textarea[@class='sc-hMqMXs zscDj']"))
+        // await browser.findElement(By.xpath("//textarea[contains(@class, 'sc-hMqMXs')]"))
         //   .sendKeys('My body', Key.RETURN);
 
-        // /* change paper size */
-        // await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][3]")).click();
+        /* change paper size */
+        const cls = "//div[contains(@class, 'dimensions-col')]"
+                  + "//div[contains(@class, 'dimension')]";
 
-        // const cls = "//div[contains(@class, 'dimensions-col')]"
-        //           + "//div[contains(@class, 'dimension')]";
+        await browser.findElements(By.xpath(cls))
+          .then(async (elements) => {
+            await elements.forEach(async (element, idx) => {
+              await element.click();
+              await setTimeout(() => {}, 1000);
 
-        // await browser.findElements(By.xpath(cls))
-        //   .then(async (elements) => {
-        //     await elements.forEach(async (element, idx) => {
-        //       await element.click();
-        //       await setTimeout(() => {}, 1000);
+              await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+                .then((canvasObject) => {
+                  const base = browser.executeScript(
+                    'return arguments[0].toDataURL();',
+                    canvasObject,
+                  );
 
-        //       await browser.findElement(By.xpath("//canvas[@id='canvas']"))
-        //         .then((canvasObject) => {
-        //           const base = browser.executeScript(
-        //             'return arguments[0].toDataURL();',
-        //             canvasObject,
-        //           );
+                  let paperSize = '50cm X 70cm';
+                  if (idx === 1) {
+                    paperSize = '18" X 24"';
+                  }
 
-        //           let paperSize = '50cm X 70cm';
-        //           if (idx === 1) {
-        //             paperSize = '18" X 24"';
-        //           }
+                  base.then((result) => {
+                    assert.notStrictEqual(
+                      result,
+                      originCanvasImage,
+                      `Canvas not updated when click ${paperSize} theme image`,
+                    );
+                  });
+                });
+            });
+          });
 
-        //           base.then((result) => {
-        //             assert.notStrictEqual(
-        //               result,
-        //               originCanvasImage,
-        //               `Canvas not updated when click ${paperSize} theme image`,
-        //             );
-        //           });
-        //         });
-        //     });
+        /* Check Advanced options */
+        // change title
+        await browser.findElements(By.xpath("//input[@class='sc-hSdWYo erHRpd']"))
+          .then(async (elements) => {
+            await elements.forEach(async (element, idx) => {
+              let message = '';
+              let txt = '';
+
+              switch (idx) {
+                case 0:
+                  message = 'title';
+                  txt = 'Nght Sky';
+                  break;
+                case 1:
+                  message = 'Location Text';
+                  txt = 'toronto';
+                  break;
+                default:
+                  message = 'email';
+                  txt = 'mail@mail.com';
+                  break;
+              }
+
+              await element.sendKeys(txt, Key.ENTER);
+
+              await checkCanvasUpdate(browser, originCanvasImage, message);
+            });
+          });
+
+        /* enter location and check canvas change */
+        await browser
+          .findElement(By.id('geo-location-suggestions'))
+          .sendKeys('', Key.ENTER);
+        await setTimeout(() => {}, 1000);
+
+        /* continue button check */
+        await browser.findElement(By.xpath("//button[@class='sc-gipzik fTDcrJ']")).click();
+        // await browser.wait(() => {
+        //   // Return a condition. Code will continue to run until is true 
+        //   return browser.getCurrentUrl().then((url) => {
+        //     return url;
+        //   }, (err) => {
+        //     // errored  .. TODO: retry
+        //     throw err;
         //   });
+        // }, 1000, 'Expectation error: Timed out waiting for current url');
 
-        // /* Check Advanced options */
-        // await browser.findElement(By.xpath("//div[@class='sc-jKJlTe dRaXUR'][3]")).click();
-
-        // // change title
-        // await browser.findElement(By.xpath("//input[@class='sc-hSdWYo erHRpd'][1]"))
-        //   .sendKeys('THE NIGHT SKY', Key.RETURN);
-
-        // await browser.findElement(By.xpath("//input[@class='sc-hSdWYo erHRpd'][2]"))
-        //   .sendKeys('Welcome starmapper', Key.RETURN);
+        const currentURL = await browser.getCurrentUrl()
+          .then((text) => {
+            console.log('**: ', text);
+            console.log(text.toString());
+            return text;
+          });
+        console.log('&&&&&&&&&&&:', currentURL);
+        if (currentURL.indexOf('https://eu.thenightsky.com') > -1) {
+          assert.ok('Continue button works!!');
+        } else {
+          assert.fail('Continue button doesn\'t works!!');
+        }
+        // assert.strictEqual(currentURL, 'https://eu.thenightsky.com', 'Continue button doesn\'t works!!');
       })
       .catch(err => console.log(err));
   });
