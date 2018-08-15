@@ -58,7 +58,7 @@
     "style-loader": "0.19.0",
     "styled-components": "^3.3.2",
     "sw-precache-webpack-plugin": "0.11.4",
-    "thenightsky-poster": "git+https://1daa69d93aca845c966d15ca80c9ea9170ab6f7f:x-oauth-basic@github.com/timeandplace/thenightsky-poster.git",
+    "thenightsky-poster": "https://b8c44d8971ec38c1f79b161986cf561b8a38d532:x-oauth-basic@github.com/timeandplace/thenightsky-poster/",
     "universal-cookie": "^2.1.5",
     "url-loader": "0.6.2",
     "webpack": "3.8.1",
