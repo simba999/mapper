@@ -255,13 +255,14 @@ describe('Home Page', () => {
         //     throw err;
         //   });
         // }, 1000, 'Expectation error: Timed out waiting for current url');
-
+        await browser.manage().timeouts().pageLoadTimeout(4000);
         const currentURL = await browser.getCurrentUrl()
           .then((text) => {
             console.log('**: ', text);
             console.log(text.toString());
             return text;
           });
+        
         console.log('&&&&&&&&&&&:', currentURL);
         if (currentURL.indexOf('https://eu.thenightsky.com') > -1) {
           assert.ok('Continue button works!!');
