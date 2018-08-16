@@ -209,10 +209,20 @@ describe('Home Page', () => {
       .then(async () => {
         await browser.findElement(By.xpath("//button[@class='sc-bwzfXH khcJWs']")).click();
         await browser.wait(until.elementLocated(By.xpath("//canvas[@id='canvas']")));
+        await browser.findElements(By.xpath("//div[@class='sc-jKJlTe dRaXUR']//text"))
+          .then((elements) => {
+            // elements[1].click();
+            elements.forEach((element) => {
+              element.click();
+            });
+          });
 
         /* write message */
-        await browser.findElement(By.xpath("//textarea[contains(@class, 'sc-hMqMXs')]"))
-          .sendKeys('My body', Key.RETURN);
+        const textareaObject = await browser.findElement(By.xpath("//textarea[contains(@class, 'sc-hMqMXs')]"));
+        textareaObject.sendKeys(Key.TAB);
+        textareaObject.clear();
+        textareaObject.sendKeys("Some Sample Text Here");
+          
       });
   });
 
@@ -250,6 +260,101 @@ describe('Home Page', () => {
                       result,
                       originCanvasImage,
                       `Canvas not updated when click ${paperSize} theme image`,
+                    );
+                  });
+                });
+            });
+          });
+      });
+  });
+
+  /**
+   * Test poster sizes
+   */
+  it('Should check if latitude works', async () => {
+    await browser
+      .get(serverUri)
+      .then(async () => {
+        await browser.findElement(By.xpath("//button[@class='sc-bwzfXH khcJWs']")).click();
+        await browser.wait(until.elementLocated(By.xpath("//canvas[@id='canvas']")));
+        await browser.findElements(By.xpath("//div[@class='sc-jKJlTe dRaXUR']//text"))
+          .then((elements) => {
+            // elements[1].click();
+            console.log('dropdown elements: ', elements);
+            elements.forEach((element) => {
+              element.click();
+            });
+          });
+
+        await browser.findElements(By.xpath('//div[contains(@class, "sc-cvbbAY khUyxq")]//li[@role="presentation"]'))
+          .then(async (elements) => {
+            await elements.forEach(async (element, idx) => {
+              await element.click();
+
+              let direction = 'North';
+              if (idx === 1) {
+                direction = 'South';
+              }
+
+              await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+                .then((canvasObject) => {
+                  const base = browser.executeScript(
+                    'return arguments[0].toDataURL();',
+                    canvasObject,
+                  );
+
+                  base.then((result) => {
+                    console.log('Latitude:: ', result.substring(0, 14));
+                    assert.strictEqual(
+                      result,
+                      originCanvasImage,
+                      `Canvas not updated when click latitude ${direction} buttn`,
+                    );
+                  });
+                });
+            });
+          });
+      });
+  });
+
+
+  it('Should check if longitude works', async () => {
+    await browser
+      .get(serverUri)
+      .then(async () => {
+        await browser.findElement(By.xpath("//button[@class='sc-bwzfXH khcJWs']")).click();
+        await browser.wait(until.elementLocated(By.xpath("//canvas[@id='canvas']")));
+        await browser.findElements(By.xpath("//div[@class='sc-jKJlTe dRaXUR']//text"))
+          .then((elements) => {
+            // elements[1].click();
+            elements.forEach((element) => {
+              element.click();
+            });
+          });
+
+        await browser.findElements(By.xpath('//div[contains(@class, "sc-brqgnP kJSMSC")]//li[@role="presentation"]'))
+          .then(async (elements) => {
+            await elements.forEach(async (element, idx) => {
+              await element.click();
+
+              let direction = 'EAST';
+              if (idx === 1) {
+                direction = 'WEST';
+              }
+
+              await browser.findElement(By.xpath("//canvas[@id='canvas']"))
+                .then((canvasObject) => {
+                  const base = browser.executeScript(
+                    'return arguments[0].toDataURL();',
+                    canvasObject,
+                  );
+
+                  base.then((result) => {
+                    console.log('longitude:: ', result.substring(0, 14));
+                    assert.strictEqual(
+                      result,
+                      originCanvasImage,
+                      `Canvas not updated when click latitude ${direction} buttn`,
                     );
                   });
                 });
@@ -297,9 +402,9 @@ describe('Home Page', () => {
       });
   });
 
-  /**
-   * Test theme selection working
-   */
+  // /**
+  //  * Test theme selection working
+  //  */
   // it('Should test theme selection working', async () => {
   //   await browser
   //     .get(serverUri)
@@ -307,7 +412,7 @@ describe('Home Page', () => {
   //       // get theme image buttons
   //       await browser.findElement(By.xpath("//button[@class='sc-bwzfXH khcJWs']")).click();
   //       const themeBtns = await browser.findElements(By.xpath("//li[contains(@class, 'theme')]"));
-  //       assert.strictEqual(themeBtns.length, 4, 'There should be 4 theme buttons on page');
+  //       assert.strictEqual(themeBtns.length, 3, 'There should be 4 theme buttons on page');
   //       await browser.wait(until.elementLocated(By.xpath("//canvas[@id='canvas']")));
 
   //       await browser.findElement(By.xpath("//canvas[@id='canvas']")).then(async (canvasObject) => {
